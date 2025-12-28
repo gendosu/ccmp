@@ -1,0 +1,30 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "gendosu-claude-plugins",
+  "version": "1.0.0",
+  "metadata": {
+    "description": "A collection of development utility plugins for Claude Code",
+    "pluginRoot": "./plugins"
+  },
+  "owner": {
+    "name": "Gendosu",
+    "email": "your-email@example.com"
+  },
+  "plugins": [
+    {
+      "name": "cccp",
+      "description": "Git operations specialist skill and micro-commit command for test-driven development workflows",
+      "source": "./plugins/cccp",
+      "category": "productivity",
+      "version": "0.1.0",
+      "author": {
+        "name": "Gendosu",
+        "email": "your-email@example.com"
+      },
+      "homepage": "https://github.com/gendosu/ccmp/tree/main/plugins/cccp",
+      "repository": "https://github.com/gendosu/ccmp",
+      "license": "MIT",
+      "keywords": ["git", "commit", "workflow", "tdd", "micro-commit"]
+    }
+  ]
+}
