@@ -23,6 +23,21 @@ Git operations specialist skill and micro-commit command for test-driven develop
 
 **Documentation:** [plugins/cccp/README.md](./plugins/cccp/README.md)
 
+### awesome-statusline
+
+Claude Code statusline setup skill for automatic statusline configuration.
+
+**Features:**
+- Automated statusline setup with one command
+- Displays directory name, Git branch, model name, and token statistics
+- Preserves existing settings with automatic backups
+- Idempotent operation - safe to run multiple times
+- Rich information display in the status line
+
+**Version:** 0.1.0
+
+**Documentation:** [plugins/awesome-statusline/README.md](./plugins/awesome-statusline/README.md)
+
 ## Installation
 
 ### Add Marketplace
