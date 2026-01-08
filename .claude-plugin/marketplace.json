@@ -25,6 +25,21 @@
       "repository": "https://github.com/gendosu/ccmp",
       "license": "MIT",
       "keywords": ["git", "commit", "workflow", "tdd", "micro-commit"]
+    },
+    {
+      "name": "awesome-statusline",
+      "description": "Claude Code statusline setup skill for automatic statusline configuration",
+      "source": "./plugins/awesome-statusline",
+      "category": "productivity",
+      "version": "0.1.0",
+      "author": {
+        "name": "Gendosu",
+        "email": "your-email@example.com"
+      },
+      "homepage": "https://github.com/gendosu/ccmp/tree/main/plugins/awesome-statusline",
+      "repository": "https://github.com/gendosu/ccmp",
+      "license": "MIT",
+      "keywords": ["statusline", "setup", "automation", "configuration"]
     }
   ]
 }
