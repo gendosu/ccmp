@@ -34,9 +34,16 @@ Display this error message (Japanese):
 このスキルの実行には、Codex MCPサーバーの設定が必要です。
 
 ## セットアップ手順
-1. Codex MCPサーバーをインストール
-2. Claude Codeの設定ファイル (~/.claude/settings.json) にMCPサーバーを追加
-3. Claude Codeを再起動
+Claude MCPコマンドを使用して簡単にインストール・設定できます:
+
+```bash
+claude mcp add codex codex mcp-server
+```
+
+このコマンドで自動的に:
+1. Codex MCPサーバーのインストール
+2. Claude Code設定ファイルへの追加
+が完了します。設定後はClaude Codeを再起動してください。
 
 ## 代替手段
 - 手動でのコードレビューを実施
@@ -51,9 +58,17 @@ Display this error message (English):
 This skill requires Codex MCP Server to be configured.
 
 ## Setup Instructions
-1. Install Codex MCP Server
-2. Add MCP server to Claude Code configuration file (~/.claude/settings.json)
-3. Restart Claude Code
+You can easily install and configure using Claude MCP command:
+
+```bash
+claude mcp add codex codex mcp-server
+```
+
+This command automatically:
+1. Installs Codex MCP Server
+2. Adds it to Claude Code configuration file
+
+After setup, please restart Claude Code.
 
 ## Alternative Approaches
 - Perform manual code review
