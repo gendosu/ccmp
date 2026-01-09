@@ -40,6 +40,21 @@
       "repository": "https://github.com/gendosu/ccmp",
       "license": "MIT",
       "keywords": ["statusline", "setup", "automation", "configuration"]
+    },
+    {
+      "name": "codex",
+      "description": "Codex MCP integration for code review, technical research, documentation generation, and custom queries",
+      "source": "./plugins/codex",
+      "category": "productivity",
+      "version": "0.1.0",
+      "author": {
+        "name": "Gendosu",
+        "email": "your-email@example.com"
+      },
+      "homepage": "https://github.com/gendosu/ccmp/tree/main/plugins/codex",
+      "repository": "https://github.com/gendosu/ccmp",
+      "license": "MIT",
+      "keywords": ["codex", "mcp", "code-review", "research", "documentation", "ai-assistant"]
     }
   ]
 }
