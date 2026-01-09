@@ -38,6 +38,24 @@ Claude Code statusline setup skill for automatic statusline configuration.
 
 **Documentation:** [plugins/awesome-statusline/README.md](./plugins/awesome-statusline/README.md)
 
+### Codex
+
+Codex MCP integration plugin for comprehensive code review, technical research, documentation generation, and custom queries.
+
+**Features:**
+- Code Review with automatic context gathering and security analysis
+- Technical Research with project context and best practices
+- Documentation Generation with auto-generated API specs
+- Custom Queries for flexible technical questions
+- Automatic tech stack detection and design principles loading
+- Optimized prompt construction for each use case
+
+**Version:** 0.1.0
+
+**Documentation:** [plugins/codex/README.md](./plugins/codex/README.md)
+
+**Prerequisites:** Requires Codex MCP Server to be configured
+
 ## Installation
 
 ### Add Marketplace
@@ -49,7 +67,14 @@ Claude Code statusline setup skill for automatic statusline configuration.
 ### Install Plugin
 
 ```bash
+# Install CCCP (Git operations specialist)
 /plugin install cccp@gendosu-claude-plugins
+
+# Install awesome-statusline
+/plugin install awesome-statusline@gendosu-claude-plugins
+
+# Install Codex (requires Codex MCP Server)
+/plugin install codex@gendosu-claude-plugins
 ```
 
 ## Plugin Development
