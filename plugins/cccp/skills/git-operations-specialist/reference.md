@@ -316,28 +316,6 @@ EOF
 gh pr edit 123 --body-file ./tmp/pr-update.md
 ```
 
-**Create PR with File / PR作成にファイルを使う例**:
-```bash
-# Create PR body file
-cat > ./tmp/pr-body.md <<'EOF'
-## 概要
-
-- 変更点: 新規検索機能の追加
-- 影響範囲: API, フロントエンド
-
-## テスト
-
-- [x] 単体テスト
-- [x] 結合テスト
-EOF
-
-# Create PR using the file
-gh pr create --base main --head feature/search --title "feat: add search feature" --body-file ./tmp/pr-body.md
-
-# Create as draft
-gh pr create --base main --head feature/search --title "feat: add search feature" --body-file ./tmp/pr-body.md --draft
-```
-
 **Batch Operations**:
 ```bash
 # Close multiple issues
