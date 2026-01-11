@@ -1,12 +1,12 @@
 # CCCP - Claude Code Command Pack
 
-A plugin for Claude Code that provides Git operations specialist skill and micro-commit command.
+A plugin for Claude Code that provides Git operations specialist agent and micro-commit command.
 
 ## Overview
 
 This plugin extends Claude Code with powerful Git workflow tools:
 
-- **git-operations-specialist skill**: Expert Git operations including history analysis, conflict resolution, branch strategy, and GitHub CLI operations
+- **git-operations-specialist agent**: Expert Git operations including history analysis, conflict resolution, branch strategy, and GitHub CLI operations
 - **micro-commit command**: Create fine-grained commits following Lucas Rocha's micro-commit methodology
 
 ## Prerequisites
@@ -32,9 +32,9 @@ cp -r cccp ~/.claude/plugins/
 
 ## Features
 
-### Git Operations Specialist Skill
+### Git Operations Specialist Agent
 
-The `git-operations-specialist` skill provides:
+The `git-operations-specialist` agent provides:
 
 - **Git History Analysis**: Analyze commit history, branch relationships, and file changes
 - **Conflict Resolution**: Guide through merge conflicts with appropriate strategies
@@ -55,7 +55,7 @@ The `micro-commit` command helps you:
 
 ### Using the Git Operations Specialist
 
-The skill is automatically invoked when you request Git-related assistance:
+The agent is automatically invoked when you request Git-related assistance:
 
 ```
 "Analyze the git history for this feature branch"
@@ -80,10 +80,8 @@ This will analyze your staged changes and create appropriately scoped commits.
 cccp/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin configuration
-├── skills/
-│   └── git-operations-specialist/
-│       ├── SKILL.md         # Skill definition
-│       └── reference.md     # Detailed reference
+├── agents/
+│   └── git-operations-specialist.md  # Agent definition
 ├── commands/
 │   └── micro-commit.md      # Micro-commit command definition
 ├── LICENSE                  # MIT License
