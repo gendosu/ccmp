@@ -1,9 +1,9 @@
 {
   "name": "cccp",
-  "version": "0.1.0",
-  "description": "Git operations specialist skill and micro-commit command for Claude Code",
-  "skills": [
-    "./skills/git-operations-specialist"
+  "version": "0.2.0",
+  "description": "Git operations specialist agent and micro-commit command for Claude Code",
+  "agents": [
+    "./agents/git-operations-specialist.md"
   ],
   "commands": [
     "./commands/micro-commit.md"
