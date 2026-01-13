@@ -8,35 +8,68 @@ CCMP (Claude Code Marketplace) は、Claude Code向けの生産性向上プラ�
 
 ## 利用可能なプラグイン
 
-### CCCP (Claude Code Command Pack)
-
-テスト駆動開発ワークフロー向けのGit操作スペシャリストスキルとマイクロコミットコマンド。
-
-**機能:**
-- 包括的なバージョン管理のためのGit操作スペシャリストスキル
-- Lucas Rochaの手法に基づくマイクロコミットコマンド
-- テスト駆動変更サイクルのサポート
-- Conventional Commitメッセージの自動生成
-- 自動化されたコミットワークフローの最適化
-
-**バージョン:** 0.1.0
-
-**ドキュメント:** [plugins/cccp/README.md](./plugins/cccp/README.md)
-
-### awesome-statusline
-
-Claude Code ステータスライン自動設定スキル。
-
-**機能:**
-- 1コマンドでのステータスライン自動セットアップ
-- ディレクトリ名、Gitブランチ、モデル名、トークン統計の表示
-- 既存設定の保護と自動バックアップ
-- 冪等性のある操作 - 複数回実行しても安全
-- ステータスラインでの豊富な情報表示
-
-**バージョン:** 0.1.0
-
-**ドキュメント:** [plugins/awesome-statusline/README.md](./plugins/awesome-statusline/README.md)
+<table>
+<thead>
+  <tr>
+    <th>プラグイン名</th>
+    <th>説明</th>
+    <th>種別</th>
+    <th>機能名</th>
+    <th>バージョン</th>
+    <th>ドキュメント</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td rowspan="7"><strong>CCCP</strong><br>(Claude Code Command Pack)</td>
+    <td rowspan="7">テスト駆動開発ワークフロー向けのGit操作スペシャリストエージェントとマイクロコミットコマンド</td>
+    <td>Agent</td>
+    <td>git-operations-specialist - Git操作全般（コミット、ブランチ、マージ、競合解決）</td>
+    <td rowspan="7">0.3.0</td>
+    <td rowspan="7"><a href="./plugins/cccp/README.md">README</a></td>
+  </tr>
+  <tr>
+    <td>Agent</td>
+    <td>project-manager - プロジェクト管理全般</td>
+  </tr>
+  <tr>
+    <td>Command</td>
+    <td>commit - git stageされている内容でコミット</td>
+  </tr>
+  <tr>
+    <td>Command</td>
+    <td>micro-commit - コンテキストベースのマイクロコミット分割</td>
+  </tr>
+  <tr>
+    <td>Command</td>
+    <td>todo-task-planning - タスク計画実行</td>
+  </tr>
+  <tr>
+    <td>Command</td>
+    <td>todo-task-run - TODOファイルからタスク実行してPR作成</td>
+  </tr>
+  <tr>
+    <td>Skill</td>
+    <td>key-guidelines - 開発ガイドライン参照</td>
+  </tr>
+  <tr>
+    <td rowspan="1"><strong>awesome-statusline</strong></td>
+    <td rowspan="1">Claude Code ステータスライン自動設定スキル</td>
+    <td>Skill</td>
+    <td>setup-statusline - ステータスライン自動セットアップ</td>
+    <td rowspan="1">0.1.0</td>
+    <td rowspan="1"><a href="./plugins/awesome-statusline/README.md">README</a></td>
+  </tr>
+  <tr>
+    <td rowspan="1"><strong>codex</strong></td>
+    <td rowspan="1">Codex MCP連携プラグイン - コードレビュー、技術調査、ドキュメント生成</td>
+    <td>Skill</td>
+    <td>codex - コードレビュー、技術調査、ドキュメント生成、カスタムクエリ</td>
+    <td rowspan="1">0.1.1</td>
+    <td rowspan="1"><a href="./plugins/codex/README.md">README</a></td>
+  </tr>
+</tbody>
+</table>
 
 ## インストール
 
