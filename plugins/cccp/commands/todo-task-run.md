@@ -32,6 +32,10 @@ arguments:
 
 - [Related Documentation List](@docs)
 
+## Core Guidelines
+
+Before starting any task, read and follow `/cccp:key-guidelines`
+
 ## 📋 Investigation Results Storage Guidelines
 
 ### Memory File Naming Conventions

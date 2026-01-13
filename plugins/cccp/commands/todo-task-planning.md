@@ -26,6 +26,10 @@ Do not neglect checking to avoid duplicating research results and tasks.
 
 - [Related Document List](@docs)
 
+## Core Guidelines
+
+Before starting any task, read and follow `/cccp:key-guidelines`
+
 ## 🚨 Important Implementation Requirements
 
 **Optional**: This command can directly update the $ARGUMENTS file (the file specified as a parameter)
