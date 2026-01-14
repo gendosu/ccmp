@@ -8,53 +8,68 @@ CCMP (Claude Code Marketplace) is a monorepo containing productivity plugins for
 
 ## Available Plugins
 
-### CCCP (Claude Code Command Pack)
-
-Git operations specialist skill and micro-commit command for test-driven development workflows.
-
-**Features:**
-- Git operations specialist skill for comprehensive version control management
-- Micro-commit command following Lucas Rocha's methodology
-- Support for test-driven change cycles
-- Conventional commit message generation
-- Automated commit workflow optimization
-
-**Version:** 0.1.0
-
-**Documentation:** [plugins/cccp/README.md](./plugins/cccp/README.md)
-
-### awesome-statusline
-
-Claude Code statusline setup skill for automatic statusline configuration.
-
-**Features:**
-- Automated statusline setup with one command
-- Displays directory name, Git branch, model name, and token statistics
-- Preserves existing settings with automatic backups
-- Idempotent operation - safe to run multiple times
-- Rich information display in the status line
-
-**Version:** 0.1.0
-
-**Documentation:** [plugins/awesome-statusline/README.md](./plugins/awesome-statusline/README.md)
-
-### Codex
-
-Codex MCP integration plugin for comprehensive code review, technical research, documentation generation, and custom queries.
-
-**Features:**
-- Code Review with automatic context gathering and security analysis
-- Technical Research with project context and best practices
-- Documentation Generation with auto-generated API specs
-- Custom Queries for flexible technical questions
-- Automatic tech stack detection and design principles loading
-- Optimized prompt construction for each use case
-
-**Version:** 0.1.0
-
-**Documentation:** [plugins/codex/README.md](./plugins/codex/README.md)
-
-**Prerequisites:** Requires Codex MCP Server to be configured
+<table>
+<thead>
+  <tr>
+    <th>Plugin Name</th>
+    <th>Description</th>
+    <th>Type</th>
+    <th>Feature Name</th>
+    <th>Version</th>
+    <th>Documentation</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td rowspan="7"><strong>CCCP</strong><br>(Claude Code Command Pack)</td>
+    <td rowspan="7">Git operations specialist agents and micro-commit commands for test-driven development workflows</td>
+    <td>Agent</td>
+    <td>git-operations-specialist - Comprehensive Git operations (commit, branch, merge, conflict resolution)</td>
+    <td rowspan="7">0.3.0</td>
+    <td rowspan="7"><a href="./plugins/cccp/README.md">README</a></td>
+  </tr>
+  <tr>
+    <td>Agent</td>
+    <td>project-manager - Overall project management</td>
+  </tr>
+  <tr>
+    <td>Command</td>
+    <td>commit - Commit with staged changes</td>
+  </tr>
+  <tr>
+    <td>Command</td>
+    <td>micro-commit - Context-based micro-commit splitting</td>
+  </tr>
+  <tr>
+    <td>Command</td>
+    <td>todo-task-planning - Task planning execution</td>
+  </tr>
+  <tr>
+    <td>Command</td>
+    <td>todo-task-run - Execute tasks from TODO file and create PR</td>
+  </tr>
+  <tr>
+    <td>Skill</td>
+    <td>key-guidelines - Development guideline reference</td>
+  </tr>
+  <tr>
+    <td rowspan="1"><strong>awesome-statusline</strong></td>
+    <td rowspan="1">Claude Code statusline automatic setup skill</td>
+    <td>Skill</td>
+    <td>setup-statusline - Automatic statusline setup</td>
+    <td rowspan="1">0.1.0</td>
+    <td rowspan="1"><a href="./plugins/awesome-statusline/README.md">README</a></td>
+  </tr>
+  <tr>
+    <td rowspan="1"><strong>codex</strong></td>
+    <td rowspan="1">Codex MCP integration plugin - Code review, technical research, documentation generation</td>
+    <td>Skill</td>
+    <td>codex - Code review, technical research, documentation generation, custom queries</td>
+    <td rowspan="1">0.1.1</td>
+    <td rowspan="1"><a href="./plugins/codex/README.md">README</a></td>
+  </tr>
+</tbody>
+</table>
 
 ## Installation
 
@@ -67,14 +82,7 @@ Codex MCP integration plugin for comprehensive code review, technical research, 
 ### Install Plugin
 
 ```bash
-# Install CCCP (Git operations specialist)
 /plugin install cccp@gendosu-claude-plugins
-
-# Install awesome-statusline
-/plugin install awesome-statusline@gendosu-claude-plugins
-
-# Install Codex (requires Codex MCP Server)
-/plugin install codex@gendosu-claude-plugins
 ```
 
 ## Plugin Development
@@ -138,7 +146,7 @@ Ensure the marketplace has been added correctly:
 
 2. Check that the plugin's `plugin.json` exists:
    ```bash
-   ls plugins/*/. claude-plugin/plugin.json
+   ls plugins/*/.claude-plugin/plugin.json
    ```
 
 ### Plugin Not Loading
