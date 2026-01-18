@@ -35,30 +35,45 @@ Do not neglect checking to avoid duplicating research results and tasks.
 ### Option Behavior
 
 **`--branch [branch_name]` option:**
-- Creates the specified branch at the start of task execution
+- **Adds a branch creation task at the beginning of the task list**
+- If `branch_name` is provided: Uses the specified branch name
+- If `branch_name` is omitted: Auto-generates branch name following Git naming conventions
 - All commits during task execution will be made to this branch
 - Can be used independently without `--pr`
 - Useful when you want to work on a feature branch but don't need a PR yet
 
+**Branch name auto-generation rules:**
+- Analyzes TODO file content to determine branch type and purpose
+- Follows Git naming conventions: `{type}/{descriptive-name}`
+- Types: `feature/`, `bugfix/`, `refactor/`, `chore/`, `docs/`
+- Format: lowercase, hyphen-separated, English
+- Example: `feature/actionlog-email-notification`
+
 **`--pr` option:**
 - Includes all `--branch` functionality (branch creation and commits)
-- Additionally creates a pull request after all tasks are completed
+- **Adds a pull request creation task at the end of the task list**
 - If `--branch` is not specified, a branch name will be auto-generated
 - The PR will include all changes made during task execution
+- If PR template instructions exist in CLAUDE.md or similar files, those templates will be used
 
 ### Usage Examples
 
 ```bash
-# Example 1: Create branch and work on it (no PR)
+# Example 1: Create branch with auto-generated name (no PR)
+/cccp:todo-task-planning TODO.md --branch
+# → Generates branch name like: feature/actionlog-notification
+
+# Example 2: Create branch with specific name (no PR)
 /cccp:todo-task-planning docs/todos/feature-x.md --branch feature/user-auth
 
-# Example 2: Create PR with auto-generated branch name
+# Example 3: Create PR with auto-generated branch name
 /cccp:todo-task-planning docs/todos/feature-x.md --pr
+# → Auto-generates branch name and creates PR
 
-# Example 3: Create PR with specific branch name
+# Example 4: Create PR with specific branch name
 /cccp:todo-task-planning docs/todos/feature-x.md --pr --branch feature/user-auth
 
-# Example 4: Basic task planning (no branch, no PR)
+# Example 5: Basic task planning (no branch, no PR)
 /cccp:todo-task-planning docs/todos/feature-x.md
 ```
 
@@ -67,7 +82,21 @@ Do not neglect checking to avoid duplicating research results and tasks.
 When these options are specified, the task planning should include:
 
 **For `--branch` option:**
-- Task to create the specified branch at the beginning
+- **Branch Name Determination:**
+  - If branch name is provided: Use as-is (validate against naming conventions)
+  - If branch name is omitted: Auto-generate following this logic:
+    1. Read TODO file title and content
+    2. Determine branch type based on task nature:
+       - `feature/` - New functionality implementation
+       - `bugfix/` - Bug fixes, issue resolution
+       - `refactor/` - Code restructuring without behavior change
+       - `chore/` - Development environment, dependencies, tooling
+       - `docs/` - Documentation updates
+    3. Extract key feature/issue name from TODO (2-4 words max)
+    4. Convert to lowercase, hyphen-separated English
+    5. Format: `{type}/{descriptive-name}`
+    6. Example: "ActionLog Email Notification" → `feature/actionlog-email-notification`
+- Task to create the determined/generated branch at the beginning
 - All modification tasks should indicate they will be committed to this branch
 - No PR-related tasks
 
@@ -93,20 +122,18 @@ Before starting any task, read and follow `/cccp:key-guidelines`
 - Add new task planning results in a structured format while preserving existing content
 - After file update is complete, confirm, verify, and report the updated content
 
-**Note**: Agents (Explore, Plan, cccp:project-manager) cannot call other agents.
-Since the Task tool is not available inside agents, all agent orchestration is executed by the main Claude executor in Phase 0.
-
 ## 🔄 Processing Flow
 
 ### Phase 0: Multi-Agent Orchestration (Main Claude Executor)
 
-**Important**: This phase is executed by the **main Claude executor** (not an agent).
-Since the Task tool is not available inside agents, agents cannot call other agents.
-
 **⚠️ CRITICAL: Sequential Execution Required**
 
 The agents in Phase 0 MUST be executed in the following order:
-1. Phase 0.1: TODO File Reading → 2. Phase 0.2: Explore Agent → 3. Phase 0.3: Plan Agent → 4. Phase 0.4: cccp:project-manager Agent → 5. Phase 0.5: Verification
+1. Phase 0.1: TODO File Reading
+2. Phase 0.2: Explore Agent
+3. Phase 0.3: Plan Agent
+4. Phase 0.4: cccp:project-manager Agent
+5. Phase 0.5: Verification
 
 **DO NOT execute agents in parallel.** Each phase depends on the results of the previous phase:
 - Phase 0.3 (Plan) requires `exploration_results` from Phase 0.2 (Explore)
@@ -135,7 +162,29 @@ Promise.all([
    - Extract information on tasks, requirements, and tech stack
    - Determine exploration thoroughness (quick/medium/very thorough)
 
-2. **Context Preparation for Exploration**
+2. **Git Workflow Options Preparation**
+   - Check `--branch` and `--pr` options from command-line arguments
+   - Prepare the following variables (used in subsequent agent calls):
+     - `HAS_BRANCH_OPTION`: true if `--branch` option is specified
+     - `HAS_PR_OPTION`: true if `--pr` option is specified
+     - `BRANCH_NAME`: Branch name (as-is if specified, auto-generated in next step if not)
+     - `IS_AUTO_GENERATED`: true if branch name was auto-generated
+
+3. **Branch Name Generation (if --branch option specified without value)**
+   - Read TODO file title and overview
+   - Determine branch type:
+     - `feature/` - New functionality (default for most implementations)
+     - `bugfix/` - Bug fixes mentioned in TODO
+     - `refactor/` - Code restructuring mentioned
+     - `chore/` - Tooling, dependencies, environment setup
+     - `docs/` - Documentation-focused tasks
+   - Extract key feature name (2-4 words)
+   - Convert to lowercase, hyphen-separated English
+   - Validate against Git naming conventions
+   - Set generated branch name to `BRANCH_NAME` variable and set `IS_AUTO_GENERATED = true`
+   - Example: "ActionLog通知実装" → `feature/actionlog-notification`
+
+4. **Context Preparation for Exploration**
    - Identify feature areas and related keywords
    - Determine exploration scope (file patterns, directories)
    - Check existing docs/memory research results (to avoid duplicate research)
@@ -258,6 +307,38 @@ Task({
     ### Detailed Information
     Full exploration results: docs/memory/explorations/[DATE]-[feature]-exploration.md
 
+    ## Git Workflow Requirements
+
+    ${HAS_BRANCH_OPTION ? `
+    ### Branch Creation Requirements
+    - **--branch option is specified**
+    - Branch name: \`${BRANCH_NAME}\` ${IS_AUTO_GENERATED ? '(auto-generated)' : '(user-specified)'}
+    - **IMPORTANT**: Include a task to create this branch as the **FIRST task** in the task list
+    - Task format example:
+      \`\`\`markdown
+      ### Phase 0: Branch Creation ✅
+
+      - [ ] ✅ **Create branch**
+        - Command: \`git checkout -b ${BRANCH_NAME}\`
+        - 📋 All changes will be committed to this branch
+        - Estimated time: 1 minute
+      \`\`\`
+    - **IMPORTANT**: Do NOT include 📁 file references in branch creation tasks (this is a Git operation, not a file operation)
+    - All implementation tasks should be planned assuming work will be done on this branch
+    ` : '- Branch option is not specified'}
+
+    ${HAS_PR_OPTION ? `
+    ### Pull Request Creation Requirements
+    - **--pr option is specified**
+    - **IMPORTANT**: Include a task to create a pull request as the **LAST task** in the task list
+    - The PR creation task should include:
+      - Committing all changes
+      - Creating PR description (including development reason, development content, impact)
+      - Executing \`gh pr create\` command
+    - **IMPORTANT**: Do NOT include 📁 file references in PR creation tasks (this is a Git operation, not a file operation)
+    - If PR template instructions exist in CLAUDE.md or similar files, specify to follow them
+    ` : '- PR option is not specified'}
+
     ## Planning Goals
     Design a detailed plan to implement the following feature:
     [Feature description]
@@ -273,6 +354,12 @@ Task({
        - Specific implementation steps
        - Deliverables for each step
        - Dependencies and execution order
+       - **IMPORTANT**: If --branch option is specified, include branch creation task first
+       - **IMPORTANT**: If --pr option is specified, include PR creation task last
+       - **Git Commit Task Description Rules**:
+         - ❌ Avoid: Writing detailed git commands (e.g., \`git add file && git commit -m "message"\`)
+         - ✅ Recommended: Write only concise instruction \`Execute cccp:micro-commit\`
+         - Reason: cccp:micro-commit automatically creates appropriate context-based commits
 
     3. **Critical Files**
        - Files that need to be created or modified
@@ -372,11 +459,16 @@ Task({
        - Points requiring UI/UX decisions
        - Prepare structured options for use with AskUserQuestion tool
 
-    3. **TodoWrite Structure Preparation**
+    3. **Checklist Structure Preparation**
        - Task list in checklist format (\`- [ ]\`)
        - Feasibility markers on each task (✅⏳🔍🚧)
-       - File references (📁) and rationale (📊)
+       - **For implementation tasks with file operations**: Include file references (📁) and rationale (📊)
+       - **For tasks without file operations** (branch creation, PR creation, Git operations, etc.): Do NOT include file references (📁)
        - Nested subtasks (2-space indent)
+       - **Git Commit Task Description Rules**:
+         - ❌ Avoid: Writing detailed git commands (e.g., \`git add Gemfile.lock && git commit -m "..."\`)
+         - ✅ Recommended: Write only concise instruction \`Execute cccp:micro-commit\`
+         - Reason: cccp:micro-commit automatically creates appropriate context-based commits, so manual git commands are not needed
        - **Task Granularity Requirements**:
          - Each task targets one file or one feature
          - Tasks are completable in 30 min - 2 hours
@@ -420,7 +512,7 @@ Task({
        }[]
        ```
 
-    3. **todowrite_structure**
+    3. **checklist_structure**
        - Complete task structure in checklist format
        - Organized by category
        - With markers and icons
@@ -464,7 +556,7 @@ Task({
 
 3. **Preparation for Next Phase**
    - If `strategic_plan.user_questions` exists, use in Phase 3
-   - Use `strategic_plan.todowrite_structure` in Phase 4
+   - Use `strategic_plan.checklist_structure` in Phase 4
    - Retain `exploration_results` and `planning_results` as reference information
 
 4. **Proceed to Phase 1**
@@ -497,7 +589,7 @@ Task({
      - Reference `docs/memory/planning/YYYY-MM-DD-[feature]-plan.md`
      - Utilize implementation strategy designed by Plan agent in Phase 0.3
    - **Utilizing Strategic Plan**
-     - Get tasks by feasibility, user questions, TodoWrite structure from `strategic_plan`
+     - Get tasks by feasibility, user questions, checklist structure from `strategic_plan`
      - Utilize strategic plan organized by cccp:project-manager agent in Phase 0.4
    - **Existing Research Check**: Check past analysis results in docs/memory to avoid duplicate analysis
 
@@ -549,6 +641,11 @@ Task({
      - Use multiSelect: true when multiple answers can be selected
      - Set concise headers (max 12 chars) for each question
      - This provides a better UX than asking questions in plain text
+   - **🚨 CRITICAL: Thorough Questioning Protocol**
+     - When you have questions or uncertainties, keep asking using AskUserQuestion tool until all doubts are resolved
+     - Never proceed with assumptions - always confirm unclear points with the user
+     - When multiple interpretations are possible, present options and ask the user to choose
+     - Do not move to the next phase until all questions and uncertainties are completely resolved
 
 7. **Evidence-Based Specification Recommendations**
    - **Required**: Present concrete recommended specifications based on research results
@@ -573,27 +670,24 @@ Task({
    - Record recommended specifications and selection reasons in a structured manner (details saved in docs/memory)
    - **docs/memory Reference Information**: Record file paths of related research and analysis results
 
-### Phase 4: TodoWrite Execution and $ARGUMENTS File Update
+### Phase 4: $ARGUMENTS File Update
 
-9. **TodoWrite Tool Execution**
-   - **Utilizing Phase 0 TodoWrite Structure**
-     - Use prepared task structure from `strategic_plan.todowrite_structure`
-     - Utilize tasks organized by feasibility from cccp:project-manager agent in Phase 0.4
-     - Get tasks by category (✅⏳🔍🚧) from `strategic_plan.tasks_by_feasibility`
-   - **Duplicate Task Check**: Compare with existing TODO list to avoid duplicates
-   - Create analyzed tasks with TodoWrite tool
-   - Include implementation feasibility indicators and blocker information
-   - **Include Research Rationale**: Attach related files and research results to each task (details referenced in docs/memory)
-   - **Implementation Guidance for Each Task**:
-     - **Target Files**: Specify exact file paths to create or modify (📁 icon)
-     - **Implementation Approach**: Brief description of how to implement (not just what)
-     - **Reference Code**: Point to similar existing code or patterns to follow
-     - **Technical Hints**: Include key technical details (API methods, data structures, etc.)
-     - This prevents "what should I do?" confusion during execution phase
+9. **Thorough Update of $ARGUMENTS File**
+    - **🔀 Branch Creation Task (when --branch option is specified)**
+      - **Add branch creation task as the FIRST task** in the task list section
+      - Task format example:
+        ```markdown
+        ### Phase 0: ブランチ作成 ✅
 
-10. **Thorough Update of $ARGUMENTS File**
+        - [ ] ✅ **ブランチを作成**
+          - コマンド: `git checkout -b [branch_name]`
+          - 📋 このブランチで全ての変更をコミット
+          - 推定時間: 1分
+        ```
+      - Replace `[branch_name]` with the actual branch name (specified or auto-generated)
+      - Place this section before all other task phases
     - **Integrating Phase 0 Results**
-      - Update file based on `strategic_plan.todowrite_structure`
+      - Update file based on `strategic_plan.checklist_structure`
       - Include links to docs/memory:
         - `docs/memory/explorations/YYYY-MM-DD-[feature]-exploration.md`
         - `docs/memory/planning/YYYY-MM-DD-[feature]-plan.md`
@@ -611,6 +705,15 @@ Task({
     - Record progress rate and update date
     - Add links to related documents and files
     - Add structured new sections while preserving existing content
+
+10. **Execute cccp:micro-commit to clean up local state**
+    - **Purpose**: Commit changes made in Phase 0-4, including docs/memory research results and $ARGUMENTS file updates
+    - **Execution Timing**: After $ARGUMENTS file update completion, before Phase 5 verification
+    - **Importance**: Commit work in logical units to maintain a state that can be rolled back at any time
+    - **Execution Details**:
+      - Verify changed files (docs/memory exploration/planning/question/recommendation files, $ARGUMENTS file)
+      - Execute cccp:micro-commit to split changes into small context-based commits
+      - After committing, verify clean state with git status
 
 ### Phase 5: Thorough Verification and Feedback
 
@@ -644,9 +747,6 @@ Task({
 
 ## 🔧 Agent Usage Best Practices
 
-**Important**: This section is a guideline for calling agents in **Phase 0 (main Claude executor)**.
-Since the Task tool is not available inside agents, agents themselves cannot call other agents.
-
 ### When to Use Explore Agent (Phase 0.2)
 Used by main Claude executor in Phase 0.2:
 - **Codebase exploration**: Finding files, patterns, or keywords across the project
@@ -669,14 +769,14 @@ Used by main Claude executor in Phase 0.3:
 Used by main Claude executor in Phase 0.4:
 - **Strategic organization**: Organizing tasks by feasibility (✅⏳🔍🚧)
 - **User question extraction**: Identifying specification ambiguities
-- **TodoWrite structure preparation**: Creating structured checklist format
+- **Checklist structure preparation**: Creating structured checklist format
 - **YAGNI validation**: Ensuring only necessary tasks are included
 - The cccp:project-manager agent integrates Explore and Plan results into actionable structure
 
 ### Workflow Example (Phase 0)
 1. **Phase 0.2: Explore Agent** → Find all salary-related files and their relationships (thoroughness: medium)
 2. **Phase 0.3: Plan Agent** → Design implementation approach for adding calculation period feature
-3. **Phase 0.4: cccp:project-manager Agent** → Organize tasks by feasibility and prepare TodoWrite structure
+3. **Phase 0.4: cccp:project-manager Agent** → Organize tasks by feasibility and prepare checklist structure
 4. **Phase 1-5** → Use agent results to execute remaining phases and update $ARGUMENTS file
 
 ### ⚠️ Common Mistakes to Avoid
@@ -754,6 +854,13 @@ const strategic_plan = await Task({
 
 ## 📋 Task List (Complete Checklist Format)
 
+### Phase 0: ブランチ作成 ✅ (when --branch option is specified)
+
+- [ ] ✅ **ブランチを作成**
+  - コマンド: `git checkout -b feature/actionlog-notification`
+  - 📋 このブランチで全ての変更をコミット
+  - 推定時間: 1分
+
 ### 🎯 Ready Tasks (✅ Immediately Executable)
 - [ ] ✅ API authentication system implementation 📁`src/api/auth/` 📊Authentication flow confirmed
   - [ ] Implement login endpoint - Create `auth/login.ts`
@@ -779,6 +886,9 @@ const strategic_plan = await Task({
     - 💡 Copy form structure from `components/UserProfile.vue`
     - 💡 Add v-model bindings for editable fields (name, email, bio)
     - 💡 Call PATCH /api/user/:id with updated data on submit
+- [ ] ✅ Commit after implementation complete
+  - 💡 Execute cccp:micro-commit to commit changes by context
+  - 💡 Estimated time: 2-3 minutes
 
 ### ⏳ Pending Tasks (Waiting for Dependencies)
 - [ ] ⏳ Frontend UI integration 📁`components/` - After API completion (waiting for `auth/login.ts` completion)
