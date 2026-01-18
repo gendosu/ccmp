@@ -529,6 +529,12 @@ Task({
    - Create analyzed tasks with TodoWrite tool
    - Include implementation feasibility indicators and blocker information
    - **Include Research Rationale**: Attach related files and research results to each task (details referenced in docs/memory)
+   - **Implementation Guidance for Each Task**:
+     - **Target Files**: Specify exact file paths to create or modify (📁 icon)
+     - **Implementation Approach**: Brief description of how to implement (not just what)
+     - **Reference Code**: Point to similar existing code or patterns to follow
+     - **Technical Hints**: Include key technical details (API methods, data structures, etc.)
+     - This prevents "what should I do?" confusion during execution phase
 
 10. **Thorough Update of $ARGUMENTS File**
     - **Integrating Phase 0 Results**
@@ -696,14 +702,28 @@ const strategic_plan = await Task({
 ### 🎯 Ready Tasks (✅ Immediately Executable)
 - [ ] ✅ API authentication system implementation 📁`src/api/auth/` 📊Authentication flow confirmed
   - [ ] Implement login endpoint - Create `auth/login.ts`
+    - 💡 Use Express.js POST handler pattern from `auth/register.ts`
+    - 💡 Validate credentials with bcrypt, generate JWT token
+    - 💡 Return { token, user } on success, 401 on failure
   - [ ] Implement token verification middleware - Create `middleware/auth.ts`
+    - 💡 Follow middleware pattern in `middleware/logger.ts`
+    - 💡 Use jsonwebtoken.verify() to validate token from Authorization header
+    - 💡 Attach decoded user to req.user for downstream handlers
   - [ ] Add session management - Extend `utils/session.ts`
+    - 💡 Add createSession() and destroySession() methods
+    - 💡 Use Redis client pattern from `utils/cache.ts`
 - [ ] ✅ Database schema update 📁`prisma/schema.prisma` 📊MySQL support
   - [ ] Update Prisma schema - Add new model definitions
+    - 💡 Follow existing User model pattern (id, createdAt, updatedAt fields)
+    - 💡 Add Session model with userId foreign key relation
   - [ ] Generate migration - Execute `npx prisma migrate dev`
+    - 💡 Run after schema changes, provide descriptive migration name
 - [🔄] ✅ User profile page implementation 📁`pages/user/profile.vue` - In progress
   - [x] Basic profile display ✓ `components/UserProfile.vue` completed
   - [ ] Add profile edit functionality - Create `components/UserProfileEdit.vue`
+    - 💡 Copy form structure from `components/UserProfile.vue`
+    - 💡 Add v-model bindings for editable fields (name, email, bio)
+    - 💡 Call PATCH /api/user/:id with updated data on submit
 
 ### ⏳ Pending Tasks (Waiting for Dependencies)
 - [ ] ⏳ Frontend UI integration 📁`components/` - After API completion (waiting for `auth/login.ts` completion)
