@@ -76,12 +76,10 @@ This command expects a TODO.md file with the following format:
 - Read TODO.md file specified in $ARGUMENTS
 - Execute `git fetch -a -p`
 - **Only when --no-pr flag is NOT specified**:
-  - Create branch from origin/develop
-  - Create empty commit with [skip ci]
-  - If an open pull request is already linked to the issue
-    - Review already implemented content and continue implementation
-  - Create pull request (convert todos into checklist)
+  - Use `/cccp:pull-request` skill to create or update pull request
+    - The skill will handle branch creation, empty commit, and PR creation
     - Pull request template: @.github/PULL_REQUEST_TEMPLATE.md
+    - If an open pull request is already linked, continue implementation
 - **When --no-pr flag is specified**: Continue work on current branch as is
 
 ### Task Execution (Use separate Task Tool for each process)
@@ -141,11 +139,8 @@ When encountering errors or unexpected issues during task execution:
    - Record project-wide impact and future prospects
    - Prepare in a form that can be utilized as reference information for similar tasks
 4. **Only when --no-pr flag is NOT specified**:
-   - **Update PR title/description**: Update to comprehensive description reflecting implementation content
-     - Details of implemented features
-     - Quality metrics (number of tests, coverage, etc.)
-     - List of main changed files
-     - Technical value and effectiveness
-     - Summary of important insights from investigation
-   - **Completion report comment**: Add detailed completion comment to pull request
-   - **Final confirmation**: Present PR page URL and report review readiness
+   - Use `/cccp:pull-request` skill to update PR with completion details
+     - The skill will handle PR title/description updates
+     - Includes: implemented features, quality metrics, changed files, technical value
+     - Adds completion report comment
+     - Presents PR page URL for review
