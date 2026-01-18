@@ -5,6 +5,42 @@ All notable changes to the CCCP plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-01-18
+
+### Added
+
+- **todo-task-run**: `--no-push` flag to skip git push operations
+  - Allows local-only commits without pushing to remote
+  - Useful for offline development or when working with multiple commits before push
+  - Can be combined with `--no-pr` flag
+
+### Changed
+
+- **todo-task-run**: Migrated commit process to `/cccp:micro-commit` command
+  - Aligns with Lucas Rocha's micro-commit methodology
+  - Provides consistent commit workflow across all commands
+  - Ensures strict adherence to one change per commit principle
+
+- **todo-task-run**: Delegated PR operations to `/cccp:pull-request` skill
+  - Simplified PR creation and update workflow
+  - Centralizes GitHub operations in git-operations-specialist agent
+  - Improves separation of concerns
+
+### Enhanced
+
+- **todo-task-planning**: Added task granularity guidelines
+  - One file or one feature per task
+  - Tasks completable in 30 minutes to 2 hours
+  - Clear dependency identification required
+  - Prevents overly broad tasks during planning phase
+
+- **todo-task-planning**: Added implementation guidance to TodoWrite structure
+  - Target files specification
+  - Implementation approach hints
+  - Reference code pointers
+  - Technical details and patterns
+  - Prevents "what should I do?" confusion during execution
+
 ## [1.0.0] - 2026-01-18
 
 ### Breaking Changes
