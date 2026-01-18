@@ -1,5 +1,6 @@
 ---
 description: Execute tasks from TODO file and create pull request [/todo-task-run xxx]
+mode: run
 arguments:
   - name: file_path
     type: string
@@ -36,41 +37,37 @@ arguments:
 
 Before starting any task, read and follow `/cccp:key-guidelines`
 
-## 📋 Investigation Results Storage Guidelines
+## Command Overview
 
-### Memory File Naming Conventions
-- **Investigation files**: `/docs/memory/investigation-YYYY-MM-DD-{topic}.md`
-- **Pattern files**: `/docs/memory/patterns/{category}-{pattern-name}.md`
-- **Technical insight files**: `/docs/memory/insights/{technology}-{insight}.md`
+The `/cccp:todo-task-run` command is designed for **execution mode** - it takes a pre-existing TODO.md file and systematically executes the tasks defined within it.
 
-### Information to Save
-- **Investigation process**: Investigation methods, tools used, reference materials
-- **Findings**: Important technical discoveries, unexpected behaviors or constraints
-- **Solutions**: Problem-solving methods, workarounds, best practices
-- **Impact scope**: Impact on other components, future implications
-- **Reference information**: Related documentation, external resources, code examples
+### Role and Responsibility
+- **Execution**: Execute tasks from TODO.md, manage git operations, create/update pull requests
+- **Not for planning**: This command does NOT create tasks or convert requirements into actionable items
+- **Task planning**: Use `/cccp:todo-task-planning` to convert requirements into a structured TODO.md before using this command
 
-### Storage Timing
-- **At investigation start**: Record investigation target and purpose
-- **Upon important discovery**: Record immediately even during investigation (consolidate later)
-- **At task completion**: Organize and consolidate results to create final version
-- **At project completion**: Abstract and generalize overall knowledge
+### Relationship with todo-task-planning
+1. **Planning phase** (`/cccp:todo-task-planning`): Analyze requirements → Create TODO.md with actionable tasks
+2. **Execution phase** (this command): Read TODO.md → Execute tasks → Track progress → Create PR
+
+### Command Invocation
+```
+/cccp:todo-task-run TODO.md
+/cccp:todo-task-run TODO.md --no-pr
+```
 
 ## Processing Flow
 
-### Task Creation (Using Task Tool)
-- Read $ARGUMENTS
-- Thoroughly understand and convert $ARGUMENTS content into tasks
-- Use TDD method (Kent Beck style) for task creation
-  - **Red**: Write minimum failing test first
-  - **Green**: Write minimum code to pass the test
-  - **Refactor**: Eliminate duplication and improve design
-  - Complete each cycle within a few minutes
-  - Clarify specifications with test-first approach before starting implementation
-- Maintain tasks in Todos
-- Add created todos to $ARGUMENTS
+### Prerequisites
+
+#### Input Contract
+This command expects a TODO.md file with the following format:
+- Tasks must be written as markdown checkboxes (`- [ ]` for incomplete, `- [x]` for complete)
+- The file should contain actionable task items
+- No strict schema validation is required - the command adapts to your task structure
 
 ### Initial Setup (Using Task Tool)
+- Read TODO.md file specified in $ARGUMENTS
 - Execute `git fetch -a -p`
 - **Only when --no-pr flag is NOT specified**:
   - Create branch from origin/develop
@@ -104,6 +101,27 @@ Before starting any task, read and follow `/cccp:key-guidelines`
   6. Report implemented content and update results
 - Repeat until no incomplete tasks remain
 - Use return values from previously executed tasks appropriately for information needed for next task execution
+
+### Error Handling and Investigation
+
+When encountering errors or unexpected issues during task execution:
+
+#### Hybrid Investigation Approach
+1. **Reference existing memory files**: Check `/docs/memory/` for previous investigations on similar issues
+2. **Investigate as needed**: If no relevant documentation exists or the issue is novel, conduct investigation
+3. **Document findings**: Record new insights in appropriate memory files for future reference
+
+#### Error Recovery Workflow
+1. **Identify the error**: Understand the root cause through debugging or investigation
+2. **Consult documentation**: Review existing memory files and reference documentation
+3. **Resolve the issue**: Apply fixes based on documented patterns or new solutions
+4. **Update memory**: If new patterns or solutions emerge, document them in `/docs/memory/patterns/`
+5. **Continue execution**: Resume task execution after resolving the error
+
+#### When to Create Memory Files
+- **New technical patterns**: Document reusable solutions in `/docs/memory/patterns/`
+- **Complex investigations**: Create investigation files when debugging takes significant effort
+- **System insights**: Record important technical discoveries about the codebase or infrastructure
 
 ### Final Completion Process (Using Task Tool)
 **Required steps upon all tasks completion**:
